@@ -1,17 +1,42 @@
 #include <stdio.h>
 #include "tgaimage.h"
+#include "model.h"
 
 const TGAColor white = TGAColor(255, 255, 255, 255);
 const TGAColor red = TGAColor(255, 0, 0, 255);
+
+const int width = 800;
+const int height = 800;
 
 void line(int x0, int y0, int x1, int y1, TGAImage &image, TGAColor color);
 
 int main(int argc, char **argv)
 {
-    TGAImage image(100, 100, TGAImage::RGB);
-    line(20, 0, 50, 50, image, red);
-    line(50, 50, 20, 0, image, white);
+    Model *model = new Model("obj/african_head.obj");
+
+    TGAImage image(width, height, TGAImage::RGB);
+    for (int i = 0; i < model->nfaces(); i++)
+    {
+        //vertices are stored in the form v x y z w
+        //faces are store in the form f vertex_index/texture_coord_index/normal_index
+        //for each vertex that makes up the face, 3 groups of such information per face
+        //we loop through each face and render lines going from each vertex to each other vertex
+        std::vector<int> face = model->face(i);
+        for (int j = 0; j < 3; j++)
+        {
+            Vec3f v0 = model->vert(face[j]);           //get the first vertex to draw the next line from
+            Vec3f v1 = model->vert(face[(j + 1) % 3]); //get the next vertex using modulo 3 to wrap around
+            int x0 = (v0.x + 1.) * width / 2.;
+            int y0 = (v0.y + 1.) * height / 2.;
+            int x1 = (v1.x + 1.) * width / 2.;
+            int y1 = (v1.y + 1.) * height / 2.;
+            line(x0, y0, x1, y1, image, white);
+        }
+    }
+    image.flip_vertically();
     image.write_tga_file("output.tga");
+
+    delete model;
     return 0;
 }
 
@@ -35,9 +60,6 @@ void line(int x0, int y0, int x1, int y1, TGAImage &image, TGAColor color)
     }
     int dx = x1 - x0;
     int dy = y1 - y0;
-    //We multiply by 2 here so we can avoit doing a compare against 0.5
-    //to determine if the next line segment is closer to the horizontal
-    //or vertical pixel
     int derror = std::abs(dy) * 2;
     int error = 0;
     int y = y0;
