@@ -1,4 +1,4 @@
-#My Tiny Renderer
+# My Tiny Renderer
 
 This is my version of the [Tiny renderer](https://github.com/ssloy/tinyrenderer).
 
