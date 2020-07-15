@@ -1,6 +1,10 @@
 {
-    "files.associations": {
-        "*.tcc": "cpp",
-        "utility": "cpp"
-    }
+  "files.associations": {
+    "*.tcc": "cpp",
+    "utility": "cpp"
+  },
+  "cmake.configureSettings": {
+    "SDL2_INCLUDE_DIR": "D:/Applications/SDL2/SDL2-2.0.12/x86_64-w64-mingw32/include",
+    "SDL2_LIBRARY": "mingw32;D:/Applications/SDL2/SDL2-2.0.12/x86_64-w64-mingw32/lib/libSDL2main.a;D:/Applications/SDL2/SDL2-2.0.12/x86_64-w64-mingw32/lib/libSDL2.dll.a"
+  }
 }
