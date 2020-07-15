@@ -23,6 +23,8 @@ void close();
 SDL_Window *gWindow = NULL;
 SDL_Surface *gScreenSurface = NULL;
 
+const int delay = 100;
+
 //this code is horrible to look at and could do with a major refactoring.
 int main(int argc, char **argv)
 {
@@ -55,8 +57,10 @@ int main(int argc, char **argv)
 
             if (!done) //not done render next face
             {
+                SDL_Delay(delay);
                 printf("Face #%i: Start\n", index);
                 render_face(index, model, buffer_ref);
+                //this is probably a memory leak and needs to be fixed sometime.
                 SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void *)buffer_ref.buffer(),
                                                                 width,
                                                                 height,
