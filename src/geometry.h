@@ -2,6 +2,7 @@
 #define __GEOMETRY_H__
 
 #include <cmath>
+#include "tgaimage.h"
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -40,10 +41,16 @@ struct Vec3
         {
             t ivert, iuv, inorm;
         };
+        struct
+        {
+            Vec2<t> xy;
+        };
+
         t raw[3];
     };
     Vec3() : x(0), y(0), z(0) {}
     Vec3(t _x, t _y, t _z) : x(_x), y(_y), z(_z) {}
+    Vec3(Vec2<t> _v, t _z) : xy(_v), z(_z) {}
     inline Vec3<t> operator^(const Vec3<t> &v) const { return Vec3<t>(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x); }
     inline Vec3<t> operator+(const Vec3<t> &v) const { return Vec3<t>(x + v.x, y + v.y, z + v.z); }
     inline Vec3<t> operator-(const Vec3<t> &v) const { return Vec3<t>(x - v.x, y - v.y, z - v.z); }
@@ -77,5 +84,8 @@ std::ostream &operator<<(std::ostream &s, Vec3<t> &v)
     s << "(" << v.x << ", " << v.y << ", " << v.z << ")\n";
     return s;
 }
+
+void line(Vec2f v0, Vec2f v1, TGAImage &image, TGAColor color);
+void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage &image, TGAColor color);
 
 #endif //__GEOMETRY_H__

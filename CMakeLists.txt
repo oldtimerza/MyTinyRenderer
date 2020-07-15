@@ -6,8 +6,10 @@ src/main.cpp
 src/tgaimage.cpp
 src/tgaimage.h
 src/geometry.h
+src/geometry.cpp
 src/model.h
 src/model.cpp
+src/transform.h
 )
 
 add_executable(MyTinyRenderer ${MY_TINY_RENDERER_SRCS})
