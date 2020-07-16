@@ -24,7 +24,7 @@ struct TGA_Header
 };
 #pragma pack(pop)
 
-class TGAImage //: public Image
+class TGAImage
 {
 protected:
     Buffer *buffer;
