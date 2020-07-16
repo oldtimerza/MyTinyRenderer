@@ -8,7 +8,7 @@ class Image
 public:
     Image(){};
     virtual ~Image(){};
-    virtual bool set(int x, int y, TGAColor c);
+    virtual bool set(int x, int y, Color c);
 };
 
 #endif

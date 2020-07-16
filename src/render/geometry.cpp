@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-#include "tgaimage.h"
+#include "buffer.h"
 #include "geometry.h"
 
-void line(Vec2f v0, Vec2f v1, TGAImage &image, TGAColor color)
+void line(Vec2f v0, Vec2f v1, Buffer &buffer, Color color)
 {
     int x0 = v0.x;
     int x1 = v1.x;
@@ -11,7 +11,7 @@ void line(Vec2f v0, Vec2f v1, TGAImage &image, TGAColor color)
     int y1 = v1.y;
     bool steep = false;
     //Transpose the line when working with "steep" lines to make then shallow
-    //then flip the x,y in the image set if steep=true
+    //then flip the x,y in the buffer set if steep=true
     //otherwise gaps in the lines appear if the angle is too steep
     if (std::abs(x0 - x1) < std::abs(y0 - y1))
     {
@@ -35,11 +35,11 @@ void line(Vec2f v0, Vec2f v1, TGAImage &image, TGAColor color)
         //if steep we need to de-transpose
         if (steep)
         {
-            image.set(y, x, color);
+            buffer.set(y, x, color);
         }
         else
         {
-            image.set(x, y, color);
+            buffer.set(x, y, color);
         }
         error += derror;
         if (error > dx)
@@ -50,7 +50,7 @@ void line(Vec2f v0, Vec2f v1, TGAImage &image, TGAColor color)
     }
 }
 
-void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage &image, TGAColor color)
+void triangle(Vec2i t0, Vec2i t1, Vec2i t2, Buffer &buffer, Color color)
 {
     if (t0.y == t1.y && t0.y == t2.y)
         return; // I dont care about degenerate triangles
@@ -74,7 +74,7 @@ void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage &image, TGAColor color)
             std::swap(A, B);
         for (int j = A.x; j <= B.x; j++)
         {
-            image.set(j, t0.y + i, color); // attention, due to int casts t0.y+i != A.y
+            buffer.set(j, t0.y + i, color); // attention, due to int casts t0.y+i != A.y
         }
     }
 }

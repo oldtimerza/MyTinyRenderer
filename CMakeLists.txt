@@ -5,13 +5,15 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 set(MY_TINY_RENDERER_SRCS 
 src/main.cpp
-src/renderer/tgaimage.cpp
-src/renderer/tgaimage.h
-src/renderer/geometry.h
-src/renderer/geometry.cpp
-src/renderer/model.h
-src/renderer/model.cpp
-src/renderer/transform.h
+src/file/tgaimage.cpp
+src/file/tgaimage.h
+src/render/buffer.h
+src/render/buffer.cpp
+src/render/geometry.h
+src/render/geometry.cpp
+src/render/model.h
+src/render/model.cpp
+src/render/transform.h
 )
 
 add_executable(MyTinyRenderer ${MY_TINY_RENDERER_SRCS})

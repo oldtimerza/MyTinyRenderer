@@ -1,7 +1,7 @@
 #ifndef __TGA_COLOR_H__
 #define __TGA_COLOR_H__
 
-struct TGAColor
+struct Color
 {
     union {
         struct
@@ -13,23 +13,23 @@ struct TGAColor
     };
     int bytespp;
 
-    TGAColor() : val(0), bytespp(1)
+    Color() : val(0), bytespp(1)
     {
     }
 
-    TGAColor(unsigned char R, unsigned char G, unsigned char B, unsigned char A) : b(B), g(G), r(R), a(A), bytespp(4)
+    Color(unsigned char R, unsigned char G, unsigned char B, unsigned char A) : b(B), g(G), r(R), a(A), bytespp(4)
     {
     }
 
-    TGAColor(int v, int bpp) : val(v), bytespp(bpp)
+    Color(int v, int bpp) : val(v), bytespp(bpp)
     {
     }
 
-    TGAColor(const TGAColor &c) : val(c.val), bytespp(c.bytespp)
+    Color(const Color &c) : val(c.val), bytespp(c.bytespp)
     {
     }
 
-    TGAColor(const unsigned char *p, int bpp) : val(0), bytespp(bpp)
+    Color(const unsigned char *p, int bpp) : val(0), bytespp(bpp)
     {
         for (int i = 0; i < bpp; i++)
         {
@@ -37,7 +37,7 @@ struct TGAColor
         }
     }
 
-    TGAColor &operator=(const TGAColor &c)
+    Color &operator=(const Color &c)
     {
         if (this != &c)
         {

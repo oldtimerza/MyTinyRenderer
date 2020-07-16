@@ -2,8 +2,8 @@
 #define __GEOMETRY_H__
 
 #include <cmath>
-#include "tgaimage.h"
-
+#include <ostream>
+#include "buffer.h"
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template <class t>
@@ -85,7 +85,7 @@ std::ostream &operator<<(std::ostream &s, Vec3<t> &v)
     return s;
 }
 
-void line(Vec2f v0, Vec2f v1, TGAImage &image, TGAColor color);
-void triangle(Vec2i t0, Vec2i t1, Vec2i t2, TGAImage &image, TGAColor color);
+void line(Vec2f v0, Vec2f v1, Buffer &buffer, Color color);
+void triangle(Vec2i t0, Vec2i t1, Vec2i t2, Buffer &buffer, Color color);
 
 #endif //__GEOMETRY_H__
