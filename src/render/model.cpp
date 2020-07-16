@@ -36,7 +36,12 @@ Model::Model(const char *filename) : verts_(), faces_()
                 idx--; // in wavefront obj all indices start at 1, not zero
                 f.push_back(idx);
             }
-            faces_.push_back(f);
+            Face *face = new Face();
+            for (int i = 0; i < 3; i++)
+            {
+                face->vertices[i] = vert(f[i]);
+            };
+            faces_.push_back(face);
         }
     }
     std::cerr << "# v# " << verts_.size() << " f# " << faces_.size() << std::endl;
@@ -56,15 +61,9 @@ int Model::nfaces()
     return (int)faces_.size();
 }
 
-Face Model::face(int idx)
+Face *Model::face(int idx)
 {
-    std::vector<int> face_data = faces_[idx];
-    Face face = Face();
-    for (int i = 0; i < 3; i++)
-    {
-        face.vertices[i] = vert(face_data[i]);
-    };
-    return face;
+    return faces_[idx];
 }
 
 Vec3f Model::vert(int i)

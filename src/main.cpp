@@ -53,9 +53,9 @@ int main(int argc, char **argv)
 
             if (!done) //not done render next face
             {
-                Face face = model->face(index);
-
-                render.draw(face, buffer_ref);
+                Face *face = model->face(index);
+                Face &face_ref = *face;
+                render.draw(face_ref, buffer_ref);
 
                 index += 1;
                 if (index == model->nfaces())

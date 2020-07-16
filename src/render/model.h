@@ -9,7 +9,7 @@ class Model
 {
 private:
     std::vector<Vec3f> verts_;
-    std::vector<std::vector<int>> faces_;
+    std::vector<Face *> faces_;
 
 public:
     Model(const char *filename);
@@ -17,7 +17,7 @@ public:
     int nverts(); // number of vertices
     int nfaces(); // number of faces
     Vec3f vert(int i);
-    Face face(int idx);
+    Face *face(int idx);
 };
 
 #endif //__MODEL_H__
