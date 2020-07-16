@@ -145,4 +145,4 @@ int Buffer::get_height()
 int Buffer::get_channels()
 {
     return channels;
-}
+};

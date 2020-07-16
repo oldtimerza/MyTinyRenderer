@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "geometry.h"
+#include "face.h"
 
 class Model
 {
@@ -16,7 +17,7 @@ public:
     int nverts(); // number of vertices
     int nfaces(); // number of faces
     Vec3f vert(int i);
-    std::vector<int> face(int idx);
+    Face face(int idx);
 };
 
 #endif //__MODEL_H__

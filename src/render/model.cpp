@@ -4,6 +4,7 @@
 #include <sstream>
 #include <vector>
 #include "model.h"
+#include "face.h"
 
 Model::Model(const char *filename) : verts_(), faces_()
 {
@@ -55,9 +56,15 @@ int Model::nfaces()
     return (int)faces_.size();
 }
 
-std::vector<int> Model::face(int idx)
+Face Model::face(int idx)
 {
-    return faces_[idx];
+    std::vector<int> face_data = faces_[idx];
+    Face face = Face();
+    for (int i = 0; i < 3; i++)
+    {
+        face.vertices[i] = vert(face_data[i]);
+    };
+    return face;
 }
 
 Vec3f Model::vert(int i)

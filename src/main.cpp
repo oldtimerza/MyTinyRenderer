@@ -6,7 +6,8 @@
 #include "./render/buffer.h"
 #include "./render/model.h"
 #include "./render/geometry.h"
-#include "./render/transform.h"
+#include "./render/face.h"
+#include "./render/render.h"
 
 const Color white = Color(255, 255, 255, 255);
 const Color red = Color(255, 0, 0, 255);
@@ -15,16 +16,11 @@ const int width = 800;
 const int height = 800;
 const int channels = 3;
 
-Vec3f light_dir(0, 0, -1.0f);
-
 bool init_sdl();
-void render_face(int index, Model *model, Buffer &buffer);
 void close();
 
 SDL_Window *gWindow = NULL;
 SDL_Surface *gScreenSurface = NULL;
-
-const int delay = 10;
 
 //this code is horrible to look at and could do with a major refactoring.
 int main(int argc, char **argv)
@@ -36,12 +32,11 @@ int main(int argc, char **argv)
     else
     {
         Model *model = new Model("obj/african_head.obj");
-        int nfaces = model->nfaces();
-        int index = 0;
-
         Buffer *buffer = new Buffer(width, height, channels);
         Buffer &buffer_ref = *buffer;
+        Render render = Render(gWindow, gScreenSurface, width, height, channels);
 
+        int index = 0;
         bool quit = false;
         bool done = false;
 
@@ -58,29 +53,12 @@ int main(int argc, char **argv)
 
             if (!done) //not done render next face
             {
-                SDL_Delay(delay);
-                printf("Face #%i: Start\n", index);
-                render_face(index, model, buffer_ref);
+                Face face = model->face(index);
 
-                //this is probably a memory leak and needs to be fixed sometime.
-                SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void *)buffer_ref.get(),
-                                                                width,
-                                                                height,
-                                                                channels * 8,     // bits per pixel = 24
-                                                                width * channels, // pitch
-                                                                0x0000FF,         // red mask
-                                                                0x00FF00,         // green mask
-                                                                0xFF0000,         // blue mask
-                                                                0);               // alpha mask (none)
-                //do an image flip just for the output then flip back to continue rendering
-                //we should change the renderer in future to just render the correct way around
-                buffer_ref.flip_vertically();
-                SDL_BlitSurface(surface, NULL, gScreenSurface, NULL);
-                SDL_UpdateWindowSurface(gWindow);
-                buffer_ref.flip_vertically();
+                render.draw(face, buffer_ref);
 
                 index += 1;
-                if (index == nfaces)
+                if (index == model->nfaces())
                 {
                     done = true;
                 }
@@ -112,9 +90,7 @@ bool init_sdl()
                                    SDL_WINDOWPOS_UNDEFINED,
                                    width,
                                    height,
-                                   SDL_WINDOW_SHOWN
-
-        );
+                                   SDL_WINDOW_SHOWN);
 
         if (gWindow == NULL)
         {
@@ -128,25 +104,6 @@ bool init_sdl()
     }
 
     return success;
-};
-
-void render_face(int index, Model *model, Buffer &buffer)
-{
-    std::vector<int> face = model->face(index);
-    Vec2i screen_coords[3];
-    Vec3f world_coords[3];
-    for (int j = 0; j < 3; j++)
-    {
-        world_coords[j] = model->vert(face[j]);
-        screen_coords[j] = world_space_to_screen_space(world_coords[j], width, height);
-    }
-    Vec3f normal = (world_coords[2] - world_coords[0]) ^ (world_coords[1] - world_coords[0]);
-    normal.normalize();
-    float intensity = (normal * light_dir) * 255;
-    if (intensity > 0)
-    {
-        triangle(screen_coords[0], screen_coords[1], screen_coords[2], buffer, Color(intensity, intensity, intensity, 255));
-    }
 };
 
 void close()

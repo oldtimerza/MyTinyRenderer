@@ -14,6 +14,9 @@ src/render/geometry.cpp
 src/render/model.h
 src/render/model.cpp
 src/render/transform.h
+src/render/face.h
+src/render/render.h
+src/render/render.cpp
 )
 
 add_executable(MyTinyRenderer ${MY_TINY_RENDERER_SRCS})
