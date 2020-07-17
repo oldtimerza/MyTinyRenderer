@@ -18,6 +18,7 @@ const int channels = 3;
 
 bool init_sdl();
 void close();
+void update_screen(Buffer &buffer);
 
 SDL_Window *gWindow = NULL;
 SDL_Surface *gScreenSurface = NULL;
@@ -34,7 +35,7 @@ int main(int argc, char **argv)
         Model *model = new Model("obj/african_head.obj");
         Buffer *buffer = new Buffer(width, height, channels);
         Buffer &buffer_ref = *buffer;
-        Render render = Render(gWindow, gScreenSurface, width, height, channels);
+        Render render = Render(width, height, channels);
 
         int index = 0;
         bool quit = false;
@@ -56,6 +57,7 @@ int main(int argc, char **argv)
                 Face *face = model->face(index);
                 Face &face_ref = *face;
                 render.draw(face_ref, buffer_ref);
+                update_screen(buffer_ref);
 
                 index += 1;
                 if (index == model->nfaces())
@@ -112,4 +114,25 @@ void close()
     gWindow = NULL;
 
     SDL_Quit();
+};
+
+void update_screen(Buffer &buffer)
+{
+    //this is probably a bad way to do the render
+    //but it works for now
+    SDL_Surface *surface = SDL_CreateRGBSurfaceFrom((void *)buffer.get(),
+                                                    width,
+                                                    height,
+                                                    channels * 8,     // bits per pixel = 24
+                                                    width * channels, // pitch
+                                                    0x0000FF,         // red mask
+                                                    0x00FF00,         // green mask
+                                                    0xFF0000,         // blue mask
+                                                    0);               // alpha mask (none)
+    //do an image flip just for the output then flip back to continue rendering
+    //we should change the renderer in future to just render the correct way around
+    buffer.flip_vertically();
+    SDL_BlitSurface(surface, NULL, gScreenSurface, NULL);
+    SDL_UpdateWindowSurface(gWindow);
+    buffer.flip_vertically();
 };
